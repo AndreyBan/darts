@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru-RU">
+<head>
+    <meta charset="UTF-8" />
+    <!--    <link rel="icon" type="image/svg+xml" href="/vite.svg" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Дартс</title>
+    <link rel="stylesheet" href="./scss/style.scss" />
+</head>
+<body>
+<div class="bg"></div>
+<h1 class="app-title">Дартс</h1>
+
+<!-- section players-->
+<section class="js-count-player count-player">
+    <div class="count-player__description">Количество игроков: </div>
+    <div class="radio-group">
+        <label class="radio-item">
+            1
+            <input type="radio" name="radio-group" value="1" hidden />
+        </label>
+        <label class="radio-item">
+            2
+            <input type="radio" name="radio-group" value="2" hidden checked />
+        </label>
+        <label class="radio-item">
+            3
+            <input type="radio" name="radio-group" value="3" hidden />
+        </label>
+        <label class="radio-item">
+            4
+            <input type="radio" name="radio-group" value="4" hidden />
+        </label>
+    </div>
+    <form class="js-form-names form-names">
+        <div class="js-input-name-group input-name-group">
+            <input type="text" name="name-1" class="input-name" autocomplete="off" placeholder="Игрок 1" />
+            <input type="text" name="name-2" class="input-name" autocomplete="off" placeholder="Игрок 2" />
+        </div>
+        <button type="submit" class="btn-submit">Начать</button>
+    </form>
+</section>
+<script type="module" src="./js/main.ts"></script>
+</body>
+</html>

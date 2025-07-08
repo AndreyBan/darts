@@ -1,0 +1,10 @@
+// colors
+
+$primary: #fff;
+$secondary: #ff0202;
+
+@mixin add-animate($className) {
+  .loaded #{$className} {
+    transition-duration: .3s;
+  }
+}

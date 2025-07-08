@@ -1,0 +1,124 @@
+@use 'mixins' as mixin;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --text-color: #fff;
+  --color-pimary: #fff;
+  --color-secondary: #ff0202;
+  --gap-x-small: 4px;
+  --gap-small: 8px;
+  --gap-normal: 16px;
+  --gap-large: 32px;
+  --gap-x-large: 64px;
+  --radius-small: 4px;
+}
+body {
+  background-color: #333;
+}
+
+.app-title {
+  text-align: center;
+  color: #fff;
+  margin: var(--gap-large) 0;
+}
+
+// start section players
+.bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: url("/img/darts-bg-2.jpg") 0 0 no-repeat;
+  background-size: cover;
+  z-index: -1;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    opacity: .8;
+  }
+}
+.count-player {
+  max-width: 300px;
+  margin: 0 auto;
+
+  &__description {
+    color: var(--text-color);
+    margin-bottom: var(--gap-small);
+  }
+}
+.radio-group {
+  display: flex;
+  column-gap: var(--gap-small);
+  margin-bottom: var(--gap-normal);
+}
+
+.radio-item {
+  --size-label: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-label);
+  height: var(--size-label);
+  background-color: var(--color-pimary);
+  border-radius: var(--radius-small);
+  border: 1px solid var(--color-pimary);
+  cursor: pointer;
+
+  &:has(:checked), &:hover {
+    color: var(--text-color);
+    background-color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+  }
+}
+
+@include mixin.add-animate('.radio-item');
+
+.form-names {
+  --height-field: 36px;
+
+  &, .input-name-group {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    row-gap: var(--gap-normal);
+  }
+}
+
+.input-name {
+  display: block;
+  background-color: transparent;
+  border-radius: var(--radius-small);
+  border: 1px solid var(--color-pimary);
+  height: var(--height-field);
+  outline: none;
+  padding-left: var(--gap-small);
+  color: var(--text-color);
+}
+
+.btn-submit {
+  height: var(--height-field);
+  font-size: 16px;
+  border-radius: var(--radius-small);
+  background-color: var(--color-secondary);
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  font-weight: bold;
+  will-change: transform;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px 0 rgba(0,0,0, .25);
+  }
+}
+
+@include mixin.add-animate('.btn-submit');
+// end section players
