@@ -10,6 +10,16 @@ export const countPlayers = () => {
     })
 
     saveFormNames()
+    changeTypeGame()
+}
+
+const changeTypeGame = () => {
+    const selectTypeGame: HTMLSelectElement = document.getElementById('game-type') as HTMLSelectElement
+    const sectionPlayers: HTMLElement | null = document.getElementById('count-player')
+
+    selectTypeGame.addEventListener('change', () => {
+        sectionPlayers?.setAttribute('data-type-game', selectTypeGame.value)
+    })
 }
 
 const getTemplateInputHTML = (idx: number) => {

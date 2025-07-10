@@ -6,39 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Дартс</title>
     <link rel="stylesheet" href="./scss/style.scss" />
+    <link rel="stylesheet" href="./scss/players.scss" />
 </head>
 <body>
 <div class="bg"></div>
 <h1 class="app-title">Дартс</h1>
 
-<!-- section players-->
-<section class="js-count-player count-player">
-    <div class="count-player__description">Количество игроков: </div>
-    <div class="radio-group">
-        <label class="radio-item">
-            1
-            <input type="radio" name="radio-group" value="1" hidden />
-        </label>
-        <label class="radio-item">
-            2
-            <input type="radio" name="radio-group" value="2" hidden checked />
-        </label>
-        <label class="radio-item">
-            3
-            <input type="radio" name="radio-group" value="3" hidden />
-        </label>
-        <label class="radio-item">
-            4
-            <input type="radio" name="radio-group" value="4" hidden />
-        </label>
-    </div>
-    <form class="js-form-names form-names">
-        <div class="js-input-name-group input-name-group">
-            <input type="text" name="name-1" class="input-name" autocomplete="off" placeholder="Игрок 1" />
-            <input type="text" name="name-2" class="input-name" autocomplete="off" placeholder="Игрок 2" />
+<!-- Section players-->
+<section id="count-player" class="count-player" data-type-game="501">
+    <label for="game-type" class="app-select-label">Выберите игру:</label>
+    <select id="game-type" name="game-type" class="app-select">
+        <option value="501" selected>501</option>
+        <option value="training">Тренировка</option>
+    </select>
+    <section id="game-501">
+        <div class="count-player__description">Количество игроков:</div>
+        <div class="radio-group">
+            <label class="radio-item">
+                1
+                <input type="radio" name="radio-group" value="1" hidden />
+            </label>
+            <label class="radio-item">
+                2
+                <input type="radio" name="radio-group" value="2" hidden checked />
+            </label>
+            <label class="radio-item">
+                3
+                <input type="radio" name="radio-group" value="3" hidden />
+            </label>
+            <label class="radio-item">
+                4
+                <input type="radio" name="radio-group" value="4" hidden />
+            </label>
         </div>
-        <button type="submit" class="btn-submit">Начать</button>
-    </form>
+        <form class="js-form-names form-names">
+            <div class="js-input-name-group input-name-group">
+                <input type="text" name="name-1" class="input-name" autocomplete="off" placeholder="Игрок 1" />
+                <input type="text" name="name-2" class="input-name" autocomplete="off" placeholder="Игрок 2" />
+            </div>
+            <button type="submit" class="btn-submit">Начать</button>
+        </form>
+    </section>
+    <a class="btn-start-training btn-submit" href="./training.html" hidden>Начать</a>
 </section>
 <script type="module" src="./js/main.ts"></script>
 </body>

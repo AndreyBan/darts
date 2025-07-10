@@ -6,5 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ?.classList
         .add('loaded')
 
+
     countPlayers()
 })

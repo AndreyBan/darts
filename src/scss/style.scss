@@ -1,8 +1,12 @@
-@use 'mixins' as mixin;
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Tektur:wght@400..900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Russo One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 :root {
   --text-color: #fff;
@@ -14,6 +18,7 @@
   --gap-large: 32px;
   --gap-x-large: 64px;
   --radius-small: 4px;
+  --height-field: 36px;
 }
 body {
   background-color: #333;
@@ -21,104 +26,31 @@ body {
 
 .app-title {
   text-align: center;
-  color: #fff;
+  color: var(--text-color);
   margin: var(--gap-large) 0;
+  font-size: 64px;
 }
 
-// start section players
-.bg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: url("/img/darts-bg-2.jpg") 0 0 no-repeat;
-  background-size: cover;
-  z-index: -1;
-  &:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #333;
-    opacity: .8;
-  }
-}
-.count-player {
-  max-width: 300px;
-  margin: 0 auto;
-
-  &__description {
-    color: var(--text-color);
-    margin-bottom: var(--gap-small);
-  }
-}
-.radio-group {
-  display: flex;
-  column-gap: var(--gap-small);
-  margin-bottom: var(--gap-normal);
-}
-
-.radio-item {
-  --size-label: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--size-label);
-  height: var(--size-label);
-  background-color: var(--color-pimary);
-  border-radius: var(--radius-small);
-  border: 1px solid var(--color-pimary);
-  cursor: pointer;
-
-  &:has(:checked), &:hover {
-    color: var(--text-color);
-    background-color: var(--color-secondary);
-    border: 1px solid var(--color-secondary);
-  }
-}
-
-@include mixin.add-animate('.radio-item');
-
-.form-names {
-  --height-field: 36px;
-
-  &, .input-name-group {
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    row-gap: var(--gap-normal);
-  }
-}
-
-.input-name {
-  display: block;
+.app-select {
+  height: 36px;
   background-color: transparent;
-  border-radius: var(--radius-small);
+  color: var(--text-color);
   border: 1px solid var(--color-pimary);
-  height: var(--height-field);
-  outline: none;
-  padding-left: var(--gap-small);
-  color: var(--text-color);
-}
-
-.btn-submit {
-  height: var(--height-field);
-  font-size: 16px;
-  border-radius: var(--radius-small);
-  background-color: var(--color-secondary);
-  border: none;
-  color: var(--text-color);
+  width: 100%;
+  margin-bottom: var(--gap-normal);
+  padding: 0 var(--gap-small);
   cursor: pointer;
-  font-weight: bold;
-  will-change: transform;
 
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px 0 rgba(0,0,0, .25);
+  &:focus {
+    outline: none;
+  }
+  option {
+    color: #333333;
+    padding: 16px 0;
   }
 }
-
-@include mixin.add-animate('.btn-submit');
-// end section players
+.app-select-label {
+  display: inline-block;
+  margin-bottom: var(--gap-small);
+  color: var(--text-color);
+}
