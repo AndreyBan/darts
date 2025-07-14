@@ -1,42 +1,180 @@
-.loaded .target {
+$breakPoint: 576px;
+$breakPointTablet: 768px;
+
+.loaded .target,
+.loaded .table-players {
   transition-duration: .3s;
   opacity: 1;
 }
 
+.game-container {
+  padding: 0 40px;
+  display: flex;
+}
+
+.table-players {
+  opacity: 0;
+  color: var(--text-color);
+  margin-top: 64px;
+  font-size: 14px;
+}
+
+.text-game {
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+
+.btn-back {
+  border: 1px solid var(--color-pimary);
+  background-color: transparent;
+  padding: 12px 48px;
+  color: var(--text-color);
+  margin-top: var(--gap-normal);
+  cursor: pointer;
+  transition-duration: .3s;
+
+  &:hover {
+    color: #333;
+    background-color: var(--color-pimary);
+  }
+}
+
+.table {
+  font-weight: 400;
+
+  &-row {
+    position: relative;
+    display: grid;
+    grid-template: 1fr / 2fr 1fr;
+    border-top: 1px solid var(--color-pimary);
+    background-color: transparent;
+    transition-duration: .3s;
+
+    &:last-child {
+      border-bottom: 1px solid var(--color-pimary);
+    }
+
+    &.active {
+      &:before {
+        content: '>';
+        position: absolute;
+        left: 8px;
+        top: 11px;
+      }
+
+      .table-cell {
+        background-color: rgba(0, 0, 0, .2);
+      }
+    }
+  }
+
+  &-cell {
+    text-align: center;
+    padding: 12px;
+    border-left: 1px solid var(--color-pimary);
+
+    &:last-child {
+      border-right: 1px solid var(--color-pimary);
+    }
+  }
+}
+
+.target-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  --size-canvas: 760px;
+  width: var(--size-canvas);
+  height: var(--size-canvas);
+  margin: 0 auto;
+
+  @media (max-width: $breakPointTablet) {
+    --size-canvas: 55vw;
+    margin: 0;
+  }
+  @media (max-width: $breakPoint) {
+    --size-canvas: 98vw;
+    margin: 0 auto;
+  }
+}
+
 .target {
+  --size-target: 675px;
+  width: var(--size-target);
+  height: var(--size-target);
   display: flex;
   opacity: 0;
   justify-content: center;
   align-items: center;
-  position: relative;
-  width: 650px;
-  height: 650px;
-  margin: var(--gap-x-large) auto 0;
+  z-index: 2;
+
+  margin: 0 auto;
   border-radius: 50%;
   overflow: hidden;
-  &:after{
-    content: '';
+
+  @media (max-width: $breakPointTablet) {
+    --size-target: 55vw;
+  }
+
+  @media (max-width: $breakPoint) {
+    //transform: scale(.5);
+    --size-target: 85vw;
+  }
+
+  &__outer {
+    --size-outer: 740px;
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url("/img/target.png") 50% 50% no-repeat;
-    background-size: 890px;
-    opacity: .08;
-    pointer-events: none;
+    border: 40px solid rgb(30, 29, 29);
+    border-radius: 50%;
+    width: var(--size-outer);
+    height: var(--size-outer);
+    overflow: hidden;
+    z-index: 1;
+    cursor: pointer;
+    transition-duration: .3s;
+
+    @media (max-width: $breakPointTablet) {
+      display: none;
+    }
+    @media (max-width: $breakPoint) {
+      --size-outer: 98vw;
+      border: 30px solid rgb(30, 29, 29);
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url("/img/target.png") 50% 50% no-repeat;
+      background-size: 890px;
+      opacity: .08;
+      pointer-events: none;
+
+      @media (max-width: $breakPoint) {
+        display: none;
+      }
+    }
+
+    &:hover {
+      box-shadow: 0 0 15px 0 rgba(0, 0, 0, .5);
+    }
   }
 
   &__single-bull,
-  &__bull{
+  &__bull {
     border: 1px solid rgba(255, 255, 255, .5);
     border-radius: 50%;
     cursor: pointer;
     opacity: .85;
     transition-duration: .3s;
+    z-index: 3;
 
     &:hover {
       opacity: 1;
     }
   }
+
   &__single-bull {
     display: flex;
     align-items: center;
@@ -44,16 +182,26 @@
     background-color: green;
     width: 65px;
     height: 65px;
+    @media (max-width: $breakPoint) {
+      width: 24vw;
+      height: 24vw;
+    }
   }
+
   &__bull {
     position: absolute;
     z-index: 1;
     background-color: #ff0202;
     width: 25px;
     height: 25px;
+    @media (max-width: $breakPoint) {
+      width: 10vw;
+      height: 10vw;
+    }
   }
 
 }
+
 .target-total {
   position: absolute;
   display: flex;
@@ -65,6 +213,19 @@
   width: 57px;
   color: #fff;
   font-weight: 400;
+  z-index: 2;
+
+  @media (max-width: $breakPointTablet) {
+    top: 6vw;
+    height: 12vw;
+    width: 6vw;
+  }
+  @media (max-width: $breakPoint) {
+    top: 12vw;
+    height: 16vw;
+    width: 10vw;
+  }
+
   &:after {
     content: '';
     position: absolute;
@@ -74,82 +235,47 @@
     transform: rotate(9deg);
   }
 
+  $radius: 32.5px; // радиус круга
+  $total-items: 20; // общее количество элементов
 
-  &:nth-child(2) {
-    transform: translateX(54px) translateY(8px) rotate(18deg);
+  @for $i from 1 through $total-items {
+    &:nth-child(#{$i}) {
+      $angle: calc(360 / $total-items) * ($i - 1); // угол для текущего элемента в градусах
+      $y: 147.5px - 147.5px * cos($angle * (pi / 180)) - $radius * cos($angle * (pi / 180)) + 85px; // вычисляем X
+      $x: $radius * sin($angle * (pi / 180)) + 147.5px * sin($angle * (pi / 180)); // вычисляем Y
+      transform: translateX(#{$x}) translateY(#{$y}) rotate($angle * 1deg);
+    }
   }
-  &:nth-child(3) {
-    transform: translateX(105px) translateY(34px) rotate(36deg);
-  }
-  &:nth-child(4) {
-    transform: translateX(144px) translateY(72px) rotate(54deg);
-  }
-  &:nth-child(5) {
-    transform: translateX(170px) translateY(122px) rotate(72deg);
-  }
-  &:nth-child(6) {
-    transform: translateX(177px) translateY(177px) rotate(90deg);
-  }
-  &:nth-child(7) {
-    transform: translateX(170px) translateY(232px) rotate(108deg);
-  }
-  &:nth-child(8) {
-    transform: translateX(144px) translateY(280px) rotate(126deg);
-  }
-  &:nth-child(9) {
-    transform: translateX(106px) translateY(320px) rotate(144deg);
-  }
-  &:nth-child(10) {
-    transform: translateX(57px) translateY(346px) rotate(162deg);
-  }
-  &:nth-child(11) {
-    transform: translateX(2px) translateY(356px) rotate(180deg);
-  }
-  &:nth-child(12) {
-    transform: translateX(-52px) translateY(349px) rotate(198deg);
-  }
-  &:nth-child(13) {
-    transform: translateX(-102px) translateY(322px) rotate(216deg);
-  }
-  &:nth-child(14) {
-    transform: translateX(-143px) translateY(284px) rotate(234deg);
-  }
-  &:nth-child(15) {
-    transform: translateX(-169px) translateY(234px) rotate(252deg);
-  }
-  &:nth-child(16) {
-    transform: translateX(-178px) translateY(180px) rotate(270deg);
-  }
-  &:nth-child(17) {
-    transform: translateX(-170px) translateY(123px) rotate(288deg);
-  }
-  &:nth-child(18) {
-    transform: translateX(-144px) translateY(75px) rotate(306deg);
-  }
-  &:nth-child(19) {
-    transform: translateX(-105px) translateY(34px) rotate(324deg);
-  }
-  &:nth-child(20) {
-    transform: translateX(-54px) translateY(8px) rotate(342deg);
-  }
-  &:nth-child(n + 7) {
-    .target-total {
-      &__x1,
-      &__x2,
-      &__x3 {
-        transform: rotate(180deg);
+  @media (max-width: $breakPointTablet) {
+    $radius: 4vw; // радиус круга
+    $total-items: 20; // общее количество элементов
+    $height: 16vw;
+
+    @for $i from 1 through $total-items {
+      &:nth-child(#{$i}) {
+        $angle: calc(360 / $total-items) * ($i - 1); // угол для текущего элемента в градусах
+        $y: calc($height - $height * cos($angle * (pi / 180)) - $radius * cos($angle * (pi / 180))); // вычисляем X
+        $x: calc($radius * sin($angle * (pi / 180)) + $height * sin($angle * (pi / 180))); // вычисляем Y
+        transform: translateX(#{$x}) translateY(#{$y}) rotate($angle * 1deg);
       }
     }
   }
-  &:nth-child(n + 16) {
-    .target-total {
-      &__x1,
-      &__x2,
-      &__x3 {
-        transform: rotate(0);
+
+  @media (max-width: $breakPoint) {
+    $radius: 3vw; // радиус круга
+    $total-items: 20; // общее количество элементов
+    $height: 29vw;
+
+    @for $i from 1 through $total-items {
+      &:nth-child(#{$i}) {
+        $angle: calc(360 / $total-items) * ($i - 1); // угол для текущего элемента в градусах
+        $y: calc($height - $height * cos($angle * (pi / 180)) - $radius * cos($angle * (pi / 180))); // вычисляем X
+        $x: calc($radius * sin($angle * (pi / 180)) + $height * sin($angle * (pi / 180))); // вычисляем Y
+        transform: translateX(#{$x}) translateY(#{$y}) rotate($angle * 1deg);
       }
     }
   }
+
   &__x1,
   &__x2,
   &__x3 {
@@ -161,23 +287,77 @@
     width: 50px;
     will-change: transform;
     transition-duration: .3s;
+    background: transparent;
+
+    @media (max-width: $breakPointTablet) {
+      height: 40px;
+      width: 30px;
+    }
+    @media (max-width: $breakPoint) {
+      height: 35px;
+      width: 25px;
+    }
 
     &:hover {
       transform: scale(1.25);
       background: radial-gradient(circle, rgba(255, 255, 255, .3) 0%, rgba(0, 0, 0, 0) 60%);
     }
   }
+
   &__x1 {
     height: 70px;
+    @media (max-width: $breakPoint) {
+      height: 5vw;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
   }
+
   &__x2 {
     font-size: 16px;
     color: green;
     margin-top: -10px;
+    @media (max-width: $breakPoint) {
+      margin-top: -4px;
+      margin-bottom: 6px;
+    }
   }
+
   &__x3 {
     margin-top: 10px;
     font-size: 16px;
     color: #ff0202;
+
+    @media (max-width: $breakPoint) {
+      margin-top: 0;
+    }
+  }
+
+  &:nth-child(n + 7) {
+    .target-total {
+      &__x1,
+      &__x2,
+      &__x3 {
+        transform: rotate(180deg);
+
+        &:hover {
+          transform: rotate(180deg) scale(1.25);
+        }
+      }
+    }
+  }
+
+  &:nth-child(n + 16) {
+    .target-total {
+      &__x1,
+      &__x2,
+      &__x3 {
+        transform: rotate(0);
+
+        &:hover {
+          transform: rotate(0) scale(1.25);
+        }
+      }
+    }
   }
 }

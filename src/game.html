@@ -10,11 +10,27 @@
     <title>Game</title>
 </head>
 <body>
-    <section id="target" class="target">
-        <div class="target__single-bull">
-            <div class="target__bull"></div>
+<div class="game-container">
+    <section class="table-players">
+        <p class="text-game">Количество легов: <span id="count-lags"></span></p>
+        <div id="table">
+            <div class="table-row">
+                <div class="table-cell">Имя игрока</div>
+                <div class="table-cell">Очки</div>
+            </div>
+        </div>
+
+        <button class="btn-back">Отменить</button>
+    </section>
+    <section class="target-wrapper">
+        <div class="target__outer"></div>
+        <div id="target" class="target">
+            <div class="js-shot target__single-bull" data-value="25">
+                <div class="js-shot target__bull" data-value="50"></div>
+            </div>
         </div>
     </section>
-    <script type="module" src="./js/game/index.ts"></script>
+</div>
+<script type="module" src="./js/game/index.ts"></script>
 </body>
 </html>

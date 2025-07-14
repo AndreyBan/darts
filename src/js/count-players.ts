@@ -13,6 +13,8 @@ export const countPlayers = () => {
     changeTypeGame()
 }
 
+
+
 const changeTypeGame = () => {
     const selectTypeGame: HTMLSelectElement = document.getElementById('game-type') as HTMLSelectElement
     const sectionPlayers: HTMLElement | null = document.getElementById('count-player')
@@ -47,12 +49,13 @@ const saveFormNames = () => {
     formNames.addEventListener('submit', (e: SubmitEvent) => {
         e.preventDefault()
 
+        const selectCount: HTMLSelectElement = document.getElementById('count-lags') as HTMLSelectElement
         const fd = new FormData(formNames)
         const dataNames: { [kye: string]: FormDataEntryValue } = Object.fromEntries(fd)
         const valueNames = Object.values(dataNames) as string[]
         const players: string[] = valueNames.map((el: string, i: number) => el || `Игрок ${i + 1}`)
 
-        localStorage.setItem('players', JSON.stringify(players))
+        localStorage.setItem('game-setting', JSON.stringify({countLags: selectCount.value,  players}))
         location.href = '/game.html'
     })
 }
