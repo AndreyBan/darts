@@ -12,13 +12,14 @@ $breakPointTablet: 768px;
   top: 24px;
   @media (max-width: $breakPoint) {
     top: auto;
-    bottom: 0;
+    bottom: 24px;
   }
 }
 .game-container {
   padding: 0 40px;
   display: flex;
   @media (max-width: $breakPoint) {
+    margin-top: var(--gap-normal);
     padding: 0;
     flex-direction: column;
     justify-content: center;
@@ -168,12 +169,14 @@ $breakPointTablet: 768px;
     z-index: 1;
     cursor: pointer;
     transition-duration: .3s;
+    user-select: none;
 
     @media (max-width: $breakPointTablet) {
       display: none;
     }
     @media (max-width: $breakPoint) {
       --size-outer: 98vw;
+      display: block;
       border: 30px solid rgb(30, 29, 29);
     }
 
@@ -250,6 +253,7 @@ $breakPointTablet: 768px;
   color: #fff;
   font-weight: 400;
   z-index: 2;
+  user-select: none;
 
   @media (max-width: $breakPointTablet) {
     top: 6vw;
@@ -257,7 +261,7 @@ $breakPointTablet: 768px;
     width: 6vw;
   }
   @media (max-width: $breakPoint) {
-    top: 12vw;
+    top: 16vw;
     height: 16vw;
     width: 10vw;
   }
