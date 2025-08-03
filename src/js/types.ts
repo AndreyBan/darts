@@ -15,7 +15,8 @@ interface IDataUpdate {
     countPlayers: number,
     rows: NodeListOf<Element>,
     throwAttempt: number,
-    player: number
+    player: number,
+    historyGame: {numberPlayer: number, value: number}[]
 }
 export type {
     IDataGame,

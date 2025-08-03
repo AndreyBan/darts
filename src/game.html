@@ -10,6 +10,7 @@
     <title>Game</title>
 </head>
 <body>
+<a href="/" class="btn-home">Завершить игру</a>
 <div class="game-container">
     <section class="table-players">
         <p class="text-game">Количество легов: <span id="count-lags"></span></p>
@@ -20,14 +21,13 @@
             </div>
         </div>
 
-        <button class="btn-back">Отменить</button>
+        <button class="btn-back js-step-back" disabled>Отменить</button>
     </section>
     <section class="target-wrapper">
-        <div class="target__outer"></div>
+        <div class="target__outer js-miss"></div>
         <div id="target" class="target">
-            <div class="js-shot target__single-bull" data-value="25">
-                <div class="js-shot target__bull" data-value="50"></div>
-            </div>
+            <div class="js-shot target__single-bull" data-value="25"></div>
+            <div class="js-shot target__bull" data-value="50"></div>
         </div>
     </section>
 </div>
