@@ -10,6 +10,10 @@ $breakPointTablet: 768px;
   position: fixed;
   right: 24px;
   top: 24px;
+  @media (max-width: $breakPoint) {
+    top: auto;
+    bottom: 0;
+  }
 }
 .game-container {
   padding: 0 40px;
@@ -80,6 +84,10 @@ $breakPointTablet: 768px;
         position: absolute;
         left: 8px;
         top: 15px;
+
+        @media (max-width: $breakPoint) {
+          top: 6px;
+        }
       }
 
       .table-cell {
