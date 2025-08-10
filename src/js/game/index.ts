@@ -92,7 +92,7 @@ const actionMiss = (updateData: IDataUpdate,) => {
 }
 
 const updatePlayerData = (updateData: IDataUpdate, value: number, isDouble = false) => {
-    const overTotal = setTotalPlayer(updateData, value, isDouble)
+    const overTotal = setTotalPlayer(updateData, value, true, isDouble)
 
     updateData.throwAttempt++
 
@@ -117,41 +117,32 @@ const setActivePlayer = (updateData: IDataUpdate) => {
     rows[updateData.player].classList.add('active')
     updateData.throwAttempt = 0
 }
-const setTotalPlayer = (updateData: IDataUpdate, value: number, isDouble = false) => {
-    const { dataPlayers, rows, player, historyGame } = updateData
+const setTotalPlayer = (updateData: IDataUpdate, value: number, showTotalAnimate = false, isDouble = false) => {
+    const { dataPlayers, rows, player } = updateData
     const totalPlayer: HTMLSpanElement | null | undefined = rows?.[updateData.player]?.querySelector('.js-total') as HTMLSpanElement
 
     if (!totalPlayer) {
         console.warn('Отсутствуют элементы с классом js-total')
         return
     }
-
     const newValue = dataPlayers[player].total - value
+    const hasOverTotal = overTotalGame(updateData, newValue, isDouble, totalPlayer)
 
-    // Условие для завершения игры
-    if (newValue === 1 || newValue < 0 || (newValue === 0 && !isDouble)) {
-        if (updateData.throwAttempt) {
-            let sumValues = 0
-            for (let i = 0; i < updateData.throwAttempt; i++) {
-                 sumValues += historyGame[historyGame.length - (i + 1)].value
-                // historyGame.pop()
-            }
-            dataPlayers[player].total += sumValues
-            historyGame.push({
-                numberPlayer: player,
-                value: -sumValues
-            })
-            totalPlayer.innerText = String(dataPlayers[player].total)
-        }
+    if (!hasOverTotal) return false
 
-        updateData.throwAttempt = 2
-
-        return false
+    if (showTotalAnimate) {
+        showTotal(value)
     }
 
-    showTotal(value)
+    actionThrowAttempt(updateData, newValue, totalPlayer)
 
-    if (!newValue) {
+    return true
+}
+
+const actionThrowAttempt = (updateData: IDataUpdate, value: number, totalPlayer: HTMLSpanElement) => {
+    const { dataPlayers, player } = updateData
+
+    if (!value) {
         updateData.throwAttempt = 0
         updateData.dataPlayers[updateData.player].winLag++
 
@@ -173,11 +164,33 @@ const setTotalPlayer = (updateData: IDataUpdate, value: number, isDouble = false
 
         !restart ? location.href = '/' : location.reload()
     } else {
-        dataPlayers[player].total = newValue
+        dataPlayers[player].total = value
+        totalPlayer.innerText = String(dataPlayers[player].total)
+    }
+}
+const overTotalGame = (updateData: IDataUpdate, value: number, isDouble = false, totalPlayer: HTMLSpanElement) => {
+    const { dataPlayers, player, historyGame } = updateData
+
+    if (value !== 1 && value >= 0 && (!value || !isDouble)) return true
+
+    if (updateData.throwAttempt) {
+        let sumValues = 0
+
+        for (let i = 0; i < updateData.throwAttempt; i++) {
+            sumValues += historyGame[historyGame.length - (i + 1)].value
+        }
+
+        dataPlayers[player].total += sumValues
+        historyGame.push({
+            numberPlayer: player,
+            value: -sumValues
+        })
         totalPlayer.innerText = String(dataPlayers[player].total)
     }
 
-    return true
+    updateData.throwAttempt = 2
+
+    return false
 }
 
 const cancelGame = (currentWinLag: number) => {
@@ -224,12 +237,14 @@ const actionStepBack = (updateData: IDataUpdate) => {
 
     updateData.historyGame.pop()
     updateData.throwAttempt = !updateData.throwAttempt ? 2 : --updateData.throwAttempt
-    showTotalHistory(value, updateData.dataPlayers[numberPlayer].name)
+    showTotal(value, updateData.dataPlayers[numberPlayer].name)
 }
 
+
 let timeoutId: number
-const showTotal = (value: number) => {
-    const totalValue: HTMLElement | null = document.querySelector('.js-total-animate')
+const showTotal = (value: number, playerName = '') => {
+    const target = playerName ? '.js-total-back' : '.js-total-animate'
+    const totalValue: HTMLElement | null = document.querySelector(target)
 
     if (!totalValue) return
 
@@ -241,32 +256,12 @@ const showTotal = (value: number) => {
     }
 
     setTimeout(() => {
-        totalValue.innerText = `-${ Math.abs(value) }`
+        const textBefore = (value < 0) ? ': -' : ': +'
+
+        totalValue.innerText = `${ playerName ? playerName + textBefore : '-' }${ Math.abs(value) }`
         totalValue.classList.add('animate')
         timeoutId = setTimeout(() => {
             totalValue?.classList.remove('animate')
-        }, 850)
-    })
-}
-
-let timeoutHistoryId: number
-const showTotalHistory = (value: number, playerName = '') => {
-    const totalValue: HTMLElement | null = document.querySelector('.js-total-back')
-
-    if (!totalValue) return
-
-    const hasAnimate = totalValue.classList.contains('animate')
-
-    if (hasAnimate) {
-        totalValue.classList.remove('animate')
-        clearTimeout(timeoutId)
-    }
-
-    setTimeout(() => {
-        totalValue.innerText = `${playerName}: ${value < 0 ? '-' : '+' }${ Math.abs(value) }`
-        totalValue.classList.add('animate')
-        timeoutHistoryId = setTimeout(() => {
-            totalValue?.classList.remove('animate')
-        }, 2000)
+        }, playerName ? 2000 : 850)
     })
 }
