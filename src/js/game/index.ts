@@ -131,11 +131,16 @@ const setTotalPlayer = (updateData: IDataUpdate, value: number, isDouble = false
     // Условие для завершения игры
     if (newValue === 1 || newValue < 0 || (newValue === 0 && !isDouble)) {
         if (updateData.throwAttempt) {
-            console.log(updateData.throwAttempt)
+            let sumValues = 0
             for (let i = 0; i < updateData.throwAttempt; i++) {
-                dataPlayers[player].total += historyGame[historyGame.length - 1].value
-                historyGame.pop()
+                 sumValues += historyGame[historyGame.length - (i + 1)].value
+                // historyGame.pop()
             }
+            dataPlayers[player].total += sumValues
+            historyGame.push({
+                numberPlayer: player,
+                value: -sumValues
+            })
             totalPlayer.innerText = String(dataPlayers[player].total)
         }
 
@@ -219,13 +224,12 @@ const actionStepBack = (updateData: IDataUpdate) => {
 
     updateData.historyGame.pop()
     updateData.throwAttempt = !updateData.throwAttempt ? 2 : --updateData.throwAttempt
-    showTotal(value, updateData.dataPlayers[numberPlayer].name)
+    showTotalHistory(value, updateData.dataPlayers[numberPlayer].name)
 }
 
 let timeoutId: number
-const showTotal = (value: number, playerName = '') => {
-    const target = playerName ? '.js-total-back' : '.js-total-animate'
-    const totalValue: HTMLElement | null = document.querySelector(target)
+const showTotal = (value: number) => {
+    const totalValue: HTMLElement | null = document.querySelector('.js-total-animate')
 
     if (!totalValue) return
 
@@ -237,13 +241,32 @@ const showTotal = (value: number, playerName = '') => {
     }
 
     setTimeout(() => {
-        totalValue.innerText = `${ playerName ? playerName + ': -' : '+' }${ value }`
+        totalValue.innerText = `-${ Math.abs(value) }`
         totalValue.classList.add('animate')
         timeoutId = setTimeout(() => {
-            if (timeoutId) {
-                clearTimeout(timeoutId)
-            }
             totalValue?.classList.remove('animate')
-        }, playerName ? 2000 : 850)
+        }, 850)
+    })
+}
+
+let timeoutHistoryId: number
+const showTotalHistory = (value: number, playerName = '') => {
+    const totalValue: HTMLElement | null = document.querySelector('.js-total-back')
+
+    if (!totalValue) return
+
+    const hasAnimate = totalValue.classList.contains('animate')
+
+    if (hasAnimate) {
+        totalValue.classList.remove('animate')
+        clearTimeout(timeoutId)
+    }
+
+    setTimeout(() => {
+        totalValue.innerText = `${playerName}: ${value < 0 ? '-' : '+' }${ Math.abs(value) }`
+        totalValue.classList.add('animate')
+        timeoutHistoryId = setTimeout(() => {
+            totalValue?.classList.remove('animate')
+        }, 2000)
     })
 }
