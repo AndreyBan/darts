@@ -6,6 +6,7 @@ $breakPointTablet: 768px;
   transition-duration: .3s;
   opacity: 1;
 }
+
 .btn-home {
   position: fixed;
   right: 24px;
@@ -15,6 +16,7 @@ $breakPointTablet: 768px;
     bottom: 24px;
   }
 }
+
 .game-container {
   padding: 0 40px;
   display: flex;
@@ -60,10 +62,12 @@ $breakPointTablet: 768px;
     background-color: var(--color-pimary);
   }
 }
+
 .btn-home {
   font-size: 12px;
   text-decoration: none;
 }
+
 .table {
   font-weight: 400;
 
@@ -405,4 +409,39 @@ $breakPointTablet: 768px;
 *:disabled {
   opacity: .5;
   pointer-events: none;
+}
+.total-back-text {
+  display: none;
+  position: absolute;
+  margin-top: var(--gap-small);
+
+  &.animate {
+    display: block;
+  }
+}
+.total-animate__value {
+  position: absolute;
+  z-index: 5;
+  font-size: 10vw;
+  font-weight: 400;
+  color: var(--text-color);
+  pointer-events: none;
+  opacity: 0;
+
+  &.animate {
+    animation: animateTotal forwards .8s;
+  }
+}
+.total-back-text {
+  color: var(--text-color);
+}
+@keyframes animateTotal {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
 }

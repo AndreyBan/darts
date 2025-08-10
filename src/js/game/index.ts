@@ -92,17 +92,19 @@ const actionMiss = (updateData: IDataUpdate,) => {
 }
 
 const updatePlayerData = (updateData: IDataUpdate, value: number, isDouble = false) => {
-    setTotalPlayer(updateData, value, isDouble)
+    const overTotal = setTotalPlayer(updateData, value, isDouble)
 
     updateData.throwAttempt++
-    updateData.historyGame.push({
-        numberPlayer: updateData.player,
-        value
-    })
+
+    if (overTotal) {
+        updateData.historyGame.push({
+            numberPlayer: updateData.player,
+            value
+        })
+    }
 
     if (updateData.throwAttempt !== 3) return
 
-    updateData.throwAttempt = 0
     setActivePlayer(updateData)
 }
 
@@ -113,9 +115,10 @@ const setActivePlayer = (updateData: IDataUpdate) => {
     rows[updateData.player].classList.remove('active')
     updateData.player = (updateData.player + 1) < countPlayers ? ++updateData.player : 0
     rows[updateData.player].classList.add('active')
+    updateData.throwAttempt = 0
 }
 const setTotalPlayer = (updateData: IDataUpdate, value: number, isDouble = false) => {
-    const { dataPlayers, rows } = updateData
+    const { dataPlayers, rows, player, historyGame } = updateData
     const totalPlayer: HTMLSpanElement | null | undefined = rows?.[updateData.player]?.querySelector('.js-total') as HTMLSpanElement
 
     if (!totalPlayer) {
@@ -123,12 +126,25 @@ const setTotalPlayer = (updateData: IDataUpdate, value: number, isDouble = false
         return
     }
 
-    const newValue = dataPlayers[updateData.player].total - value
+    const newValue = dataPlayers[player].total - value
 
     // Условие для завершения игры
     if (newValue === 1 || newValue < 0 || (newValue === 0 && !isDouble)) {
-        return
+        if (updateData.throwAttempt) {
+            console.log(updateData.throwAttempt)
+            for (let i = 0; i < updateData.throwAttempt; i++) {
+                dataPlayers[player].total += historyGame[historyGame.length - 1].value
+                historyGame.pop()
+            }
+            totalPlayer.innerText = String(dataPlayers[player].total)
+        }
+
+        updateData.throwAttempt = 2
+
+        return false
     }
+
+    showTotal(value)
 
     if (!newValue) {
         updateData.throwAttempt = 0
@@ -144,16 +160,19 @@ const setTotalPlayer = (updateData: IDataUpdate, value: number, isDouble = false
         })
 
         setNumberLag(updateData.player, playerWinLag)
+        updateData.historyGame = []
 
         if (!cancelGame(playerWinLag)) return
 
-        const restart = confirm(`${ updateData.dataPlayers[updateData.player].name } победил!\nХотите повторить игру?`)
+        const restart = confirm(`${ updateData.dataPlayers[player].name } победил!\nХотите повторить игру?`)
 
         !restart ? location.href = '/' : location.reload()
     } else {
-        dataPlayers[updateData.player].total = newValue
-        totalPlayer.innerText = String(dataPlayers[updateData.player].total)
+        dataPlayers[player].total = newValue
+        totalPlayer.innerText = String(dataPlayers[player].total)
     }
+
+    return true
 }
 
 const cancelGame = (currentWinLag: number) => {
@@ -169,7 +188,7 @@ const cancelGame = (currentWinLag: number) => {
 
 const setNumberLag = (numPlayer: number, numLag: number) => {
     const numberLagElement: HTMLSpanElement | null = document.getElementById(`player-${ numPlayer }`)
-    console.log(numberLagElement)
+
     if (!numberLagElement) {
         console.warn(`Игрока с id ${ numPlayer } не существует!`)
         return
@@ -200,4 +219,31 @@ const actionStepBack = (updateData: IDataUpdate) => {
 
     updateData.historyGame.pop()
     updateData.throwAttempt = !updateData.throwAttempt ? 2 : --updateData.throwAttempt
+    showTotal(value, updateData.dataPlayers[numberPlayer].name)
+}
+
+let timeoutId
+const showTotal = (value: number, playerName = '') => {
+    const target = playerName ? '.js-total-back' : '.js-total-animate'
+    const totalValue: HTMLElement | null = document.querySelector(target)
+
+    if (!totalValue) return
+
+    const hasAnimate = totalValue.classList.contains('animate')
+
+    if (hasAnimate) {
+        totalValue.classList.remove('animate')
+        clearTimeout(timeoutId)
+    }
+
+    setTimeout(() => {
+        totalValue.innerText = `${ playerName ? playerName + ': -' : '+' }${ value }`
+        totalValue.classList.add('animate')
+        timeoutId = setTimeout(() => {
+            if (timeoutId) {
+                clearTimeout(timeoutId)
+            }
+            totalValue?.classList.remove('animate')
+        }, playerName ? 2000 : 850)
+    })
 }
