@@ -222,7 +222,7 @@ const actionStepBack = (updateData: IDataUpdate) => {
     showTotal(value, updateData.dataPlayers[numberPlayer].name)
 }
 
-let timeoutId
+let timeoutId: number
 const showTotal = (value: number, playerName = '') => {
     const target = playerName ? '.js-total-back' : '.js-total-animate'
     const totalValue: HTMLElement | null = document.querySelector(target)
