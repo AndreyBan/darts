@@ -5,9 +5,38 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./scss/style.scss" />
+    <link rel="stylesheet" href="./scss/training.scss" />
     <title>Тренировка</title>
 </head>
 <body>
-
+<section class="training-container">
+    <div class="training-head">
+        <span class="training-head__title">Сектор <span id="js-sector-value">20</span></span>
+        <span id="js-change-sector" class="training-head__change">Изменить</span>
+    </div>
+    <div class="training-data">
+        <span class="training-total">Результат: <span id="js-total">0</span></span>
+        <span class="training-attempt">Подход <span id="js-attempt">1</span> из 10</span>
+    </div>
+    <div class="training-table-row">
+        <div class="training-table-value">0</div>
+        <div class="training-table-value">1</div>
+        <div class="training-table-value">2</div>
+        <div class="training-table-value">3</div>
+        <div class="training-table-value">4</div>
+        <div class="training-table-value">5</div>
+        <div class="training-table-value">6</div>
+        <div class="training-table-value">7</div>
+        <div class="training-table-value">8</div>
+        <div class="training-table-value">9</div>
+    </div>
+    <span class="text-after-table">* Количество попаданий в сектор с учетом х2 (+2 очка) и x3(+3 очка)</span>
+    <div class="group-btn">
+        <button id="js-reset" class="btn-back">Сбросить</button>
+        <a href="/" class="btn-home">Завершить</a>
+    </div>
+</section>
+<script type="module" src="./js/training/index.ts"></script>
 </body>
 </html>

@@ -9,10 +9,11 @@
   font-style: normal;
   user-select: none;
   -webkit-user-select: none;
-  -webkit-touch-callout:none;
-  -webkit-text-size-adjust:none;
-  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
 :root {
   --text-color: #fff;
   --color-pimary: #fff;
@@ -25,6 +26,7 @@
   --radius-small: 4px;
   --height-field: 36px;
 }
+
 body {
   background-color: #333;
 }
@@ -49,13 +51,30 @@ body {
   &:focus {
     outline: none;
   }
+
   option {
     color: #333333;
     padding: 16px 0;
   }
 }
+
 .app-select-label {
   display: inline-block;
   margin-bottom: var(--gap-small);
   color: var(--text-color);
+}
+
+.btn-back, .btn-home {
+  border: 1px solid var(--color-pimary);
+  background-color: transparent;
+  padding: 12px 48px;
+  color: var(--text-color);
+  margin-top: var(--gap-normal);
+  cursor: pointer;
+  transition-duration: .3s;
+
+  &:hover {
+    color: #333;
+    background-color: var(--color-pimary);
+  }
 }

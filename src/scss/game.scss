@@ -48,20 +48,6 @@ $breakPointTablet: 768px;
   font-size: 12px;
 }
 
-.btn-back, .btn-home {
-  border: 1px solid var(--color-pimary);
-  background-color: transparent;
-  padding: 12px 48px;
-  color: var(--text-color);
-  margin-top: var(--gap-normal);
-  cursor: pointer;
-  transition-duration: .3s;
-
-  &:hover {
-    color: #333;
-    background-color: var(--color-pimary);
-  }
-}
 
 .btn-home {
   font-size: 12px;
