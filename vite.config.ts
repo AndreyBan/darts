@@ -8,6 +8,7 @@ export default {
             input: {
                 index: './src/index.html',
                 game: './src/game.html',
+                training: './src/training.html',
             },
             output: {
                 assetFileNames: "assets/[name][extname]",
