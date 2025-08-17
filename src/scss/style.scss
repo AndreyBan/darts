@@ -94,6 +94,8 @@ body {
   right: 24px;
   top: 24px;
   text-align: center;
+  background-color: var(--color-secondary);
+  border: none;
 
   @media (max-width: 576px) {
     top: auto;
