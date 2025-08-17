@@ -29,6 +29,7 @@ export class TrainingSector {
     private elChangeSector: HTMLElement | null = document.getElementById('js-change-sector')
     private elReset: HTMLElement | null = document.getElementById('js-reset')
     private elStepBack: HTMLElement | null = document.getElementById('js-step-back')
+    private elHint: HTMLElement | null = document.getElementById('js-hint')
 
 
     private proxyTrainingData = new Proxy(this.trainingData, {
@@ -38,15 +39,15 @@ export class TrainingSector {
             obj[p] = value
 
             switch (p) {
-                case 'attempt':
-                    this.updateTrainingData('attempt')
-
-                    if (value > 10) {
-                        this.cancelSet()
-                    }
-                    break
                 case 'total':
                     this.updateTrainingData('total')
+                    break
+                case 'attempt':
+                    if (value > 10) {
+                        setTimeout(this.cancelSet)
+                    }
+                    this.updateTrainingData('attempt')
+
                     break
                 case 'sector':
                     this.updateTrainingData('sector')
@@ -58,7 +59,7 @@ export class TrainingSector {
     })
 
     private actionReset = () => {
-        this.elReset?.addEventListener('click', () => this.resetTraining())
+        this.elReset?.addEventListener('click', this.resetTraining)
     }
     private resetTraining = () => {
         this.proxyTrainingData.totalValue = 0
@@ -72,20 +73,20 @@ export class TrainingSector {
         if (!this.elChangeSector) return
 
         this.elChangeSector.addEventListener('click', () => {
-            let valueSector: number = Number(prompt('Выберите сектор', '20'))
+            let valueSector: number = Number(prompt('Выберите сектор (0 - центр мишени)', '20'))
 
-            if (valueSector < 1 || valueSector > 20) {
-                alert('Сектор возможен от 1 до 20')
+            if (valueSector < 0 || valueSector > 20) {
+                alert('Сектор возможен от 0 до 20')
             } else if (isNaN(valueSector)) {
                 alert('Сектор должен быть числом')
             } else {
-                this.proxyTrainingData.sector = valueSector
+                this.proxyTrainingData.sector = valueSector || 25
             }
         })
     }
 
     private cancelSet = () => {
-        const repeatQuestion = confirm(`Результат: ${ this.proxyTrainingData.total }\nПовторить игру?`)
+        const repeatQuestion = confirm(`Результат: ${ this.proxyTrainingData.total } (${ this.proxyTrainingData.totalValue })\nПовторить игру?`)
 
         repeatQuestion ? this.resetTraining() : location.href = '/'
     }
@@ -101,9 +102,14 @@ export class TrainingSector {
 
             this.elAttempt.innerText = String(this.proxyTrainingData.attempt)
         } else {
-            if (!this.elSector) return
+            if (!this.elSector || !this.elHint) return
 
+            const isBull = this.proxyTrainingData.sector === 25
             this.elSector.innerText = String(this.proxyTrainingData.sector)
+
+            this.elHint.innerText = isBull
+                ? '* Красная зона - 2 очка, зеленая зона - 1 очко'
+                : '* Количество попаданий в сектор с учетом х2 (+2 очка) и x3(+3 очка)'
         }
     }
 
@@ -150,7 +156,7 @@ export class TrainingSector {
     private initStepBack = () => {
         if (!this.elStepBack) return
 
-        this.elStepBack.addEventListener('click', () => this.actionStepBack())
+        this.elStepBack.addEventListener('click', this.actionStepBack)
     }
 
     public initTrainingSector = () => {
