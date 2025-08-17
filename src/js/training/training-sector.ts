@@ -98,7 +98,7 @@ export class TrainingSector {
             this.elTotalResult.innerText = String(this.proxyTrainingData.total)
             this.elTotalValue.innerText = String(this.proxyTrainingData.totalValue)
         } else if (field === 'attempt') {
-            if (!this.elAttempt) return
+            if (!this.elAttempt || this.proxyTrainingData.attempt > 10) return
 
             this.elAttempt.innerText = String(this.proxyTrainingData.attempt)
         } else {
@@ -142,6 +142,7 @@ export class TrainingSector {
 
         this.elStepBack?.classList.remove('disabled')
         if (this.proxyTrainingData.attempt > 10) return
+
         this.proxyTrainingData.attempt++
     }
     private initAttempt = () => {
