@@ -107,7 +107,7 @@ export class TrainingSector {
         }
     }
 
-    private actionStepBack = (): boolean => {
+    private actionStepBack = () => {
         const lengthHistory = this.proxyTrainingData.history.length
         const historyLast = this.proxyTrainingData.history[lengthHistory - 1]
 
