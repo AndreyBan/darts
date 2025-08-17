@@ -1,22 +1,35 @@
 interface ITrainingData {
     sector: number,
     total: number,
-    attempt: number
+    totalValue: number,
+    attempt: number,
+    history: IHistory[]
+}
+
+interface IHistory {
+    value: number,
+    total: number
 }
 
 type TrainingDataField = 'sector' | 'total' | 'attempt'
+
 export class TrainingSector {
     private trainingData: ITrainingData = {
         sector: 20,
         total: 0,
-        attempt: 1
+        totalValue: 0,
+        attempt: 1,
+        history: []
     }
 
-    private elTotal: HTMLElement | null = document.getElementById('js-total')
+    private elTotalResult: HTMLElement | null = document.getElementById('js-total-result')
+    private elTotalValue: HTMLElement | null = document.getElementById('js-total-value')
     private elSector: HTMLElement | null = document.getElementById('js-sector-value')
     private elAttempt: HTMLElement | null = document.getElementById('js-attempt')
     private elChangeSector: HTMLElement | null = document.getElementById('js-change-sector')
     private elReset: HTMLElement | null = document.getElementById('js-reset')
+    private elStepBack: HTMLElement | null = document.getElementById('js-step-back')
+
 
     private proxyTrainingData = new Proxy(this.trainingData, {
         set: (obj: ITrainingData, prop, value) => {
@@ -24,14 +37,22 @@ export class TrainingSector {
 
             obj[p] = value
 
-            if (p === 'total') this.updateTrainingData('total')
-            else if (p === 'attempt') {
-                if (value > 10) {
-                    this.cancelSet()
-                }
-                this.updateTrainingData('attempt')
+            switch (p) {
+                case 'attempt':
+                    this.updateTrainingData('attempt')
+
+                    if (value > 10) {
+                        this.cancelSet()
+                    }
+                    break
+                case 'total':
+                    this.updateTrainingData('total')
+                    break
+                case 'sector':
+                    this.updateTrainingData('sector')
+                    break
             }
-            else this.updateTrainingData('sector')
+
             return true
         }
     })
@@ -40,8 +61,11 @@ export class TrainingSector {
         this.elReset?.addEventListener('click', () => this.resetTraining())
     }
     private resetTraining = () => {
+        this.proxyTrainingData.totalValue = 0
         this.proxyTrainingData.total = 0
         this.proxyTrainingData.attempt = 1
+        this.proxyTrainingData.history = []
+        this.elStepBack?.classList.add('disabled')
     }
 
     private actionChangeSector = () => {
@@ -61,16 +85,17 @@ export class TrainingSector {
     }
 
     private cancelSet = () => {
-        const repeatQuestion = confirm(`Результат: ${this.proxyTrainingData.total}\nПовторить игру?`)
+        const repeatQuestion = confirm(`Результат: ${ this.proxyTrainingData.total }\nПовторить игру?`)
 
         repeatQuestion ? this.resetTraining() : location.href = '/'
     }
 
     private updateTrainingData = (field: TrainingDataField) => {
         if (field === 'total') {
-            if (!this.elTotal) return
+            if (!this.elTotalResult || !this.elTotalValue) return
 
-            this.elTotal.innerText = String(this.proxyTrainingData.total)
+            this.elTotalResult.innerText = String(this.proxyTrainingData.total)
+            this.elTotalValue.innerText = String(this.proxyTrainingData.totalValue)
         } else if (field === 'attempt') {
             if (!this.elAttempt) return
 
@@ -82,10 +107,34 @@ export class TrainingSector {
         }
     }
 
+    private actionStepBack = (): boolean => {
+        const lengthHistory = this.proxyTrainingData.history.length
+        const historyLast = this.proxyTrainingData.history[lengthHistory - 1]
+
+        this.proxyTrainingData.totalValue -= historyLast.value
+        this.proxyTrainingData.total -= historyLast.total
+        this.proxyTrainingData.attempt--
+        this.proxyTrainingData.history.pop()
+
+        if (lengthHistory !== 1) return
+
+        this.elStepBack?.classList.add('disabled')
+    }
+
     private actionAttempt = (value: string) => {
         const numValue = Number(value)
+        const total = numValue * this.proxyTrainingData.sector
 
-        this.proxyTrainingData.total += numValue * this.proxyTrainingData.sector
+        this.proxyTrainingData.totalValue += numValue
+        this.proxyTrainingData.total += total
+
+        this.proxyTrainingData.history.push({
+            value: numValue,
+            total: total
+        })
+
+        this.elStepBack?.classList.remove('disabled')
+        if (this.proxyTrainingData.attempt > 10) return
         this.proxyTrainingData.attempt++
     }
     private initAttempt = () => {
@@ -98,9 +147,16 @@ export class TrainingSector {
         })
     }
 
+    private initStepBack = () => {
+        if (!this.elStepBack) return
+
+        this.elStepBack.addEventListener('click', () => this.actionStepBack())
+    }
+
     public initTrainingSector = () => {
         this.initAttempt()
         this.actionChangeSector()
         this.actionReset()
+        this.initStepBack()
     }
 }

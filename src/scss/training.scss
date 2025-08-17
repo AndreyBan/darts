@@ -83,17 +83,21 @@
 }
 .group-btn {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  justify-content: space-between;
+  margin-top: var(--gap-normal);
+  @media (max-width: 576px) {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    row-gap: var(--gap-normal);
+  }
 }
-//@media (max-width: 576px) {
-//  @for $i from 1 through 10 {
-//    .training-table-value:nth-child(#{$i}) {
-//      grid-area: #{$i};
-//    }
-//  }
-//}
+.btn-back {
+  position: relative;
+}
+.btn {
+  margin-top: 0;
+}
 
 .text-after-table {
   font-size: 12px;

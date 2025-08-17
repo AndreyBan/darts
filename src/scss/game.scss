@@ -7,16 +7,6 @@ $breakPointTablet: 768px;
   opacity: 1;
 }
 
-.btn-home {
-  position: fixed;
-  right: 24px;
-  top: 24px;
-  @media (max-width: $breakPoint) {
-    top: auto;
-    bottom: 24px;
-  }
-}
-
 .game-container {
   padding: 0 40px;
   display: flex;
@@ -38,7 +28,7 @@ $breakPointTablet: 768px;
   @media (max-width: $breakPoint) {
     position: static;
     margin-top: var(--gap-normal);
-    padding: 0 20px;
+    padding: 0 var(--gap-small);
     order: 1;
   }
 }
@@ -46,12 +36,6 @@ $breakPointTablet: 768px;
 .text-game {
   margin-bottom: 12px;
   font-size: 12px;
-}
-
-
-.btn-home {
-  font-size: 12px;
-  text-decoration: none;
 }
 
 .table {
@@ -392,10 +376,6 @@ $breakPointTablet: 768px;
   }
 }
 
-*:disabled {
-  opacity: .5;
-  pointer-events: none;
-}
 .total-back-text {
   display: none;
   position: absolute;

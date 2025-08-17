@@ -16,7 +16,7 @@
         <span id="js-change-sector" class="training-head__change">Изменить</span>
     </div>
     <div class="training-data">
-        <span class="training-total">Результат: <span id="js-total">0</span></span>
+        <span class="training-total">Результат: <span id="js-total-result">0</span> (<span id="js-total-value">0</span>)</span>
         <span class="training-attempt">Подход <span id="js-attempt">1</span> из 10</span>
     </div>
     <div class="training-table-row">
@@ -33,7 +33,10 @@
     </div>
     <span class="text-after-table">* Количество попаданий в сектор с учетом х2 (+2 очка) и x3(+3 очка)</span>
     <div class="group-btn">
-        <button id="js-reset" class="btn-back">Сбросить</button>
+        <button id="js-step-back" class="btn btn-back disabled">Отменить</button>
+        <button id="js-reset" class="btn">Сбросить</button>
+    </div>
+    <div>
         <a href="/" class="btn-home">Завершить</a>
     </div>
 </section>
