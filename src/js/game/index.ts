@@ -171,7 +171,7 @@ const actionThrowAttempt = (updateData: IDataUpdate, value: number, totalPlayer:
 const overTotalGame = (updateData: IDataUpdate, value: number, isDouble = false, totalPlayer: HTMLSpanElement) => {
     const { dataPlayers, player, historyGame } = updateData
 
-    if (value !== 1 && value >= 0 && (!value || !isDouble)) return true
+    if (value > 1 || (isDouble && !value)) return true
 
     if (updateData.throwAttempt) {
         let sumValues = 0
